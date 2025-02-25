@@ -65,16 +65,172 @@
                     <div class="admin__field">
                         <label class="admin__field-label"><?= $block->escapeHtml(__('From Date')) ?></label>
                         <div class="admin__field-control">
-                            <input type="text" name="from_date" id="from_date" class="admin__control-text" data-ui-id="date-range-from" />
+                            <input type="text" name="from_date" id="from_date" class="admin__control-text date-range-field" data-ui-id="date-range-from" />
                         </div>
                     </div>
                     
                     <div class="admin__field">
                         <label class="admin__field-label"><?= $block->escapeHtml(__('To Date')) ?></label>
                         <div class="admin__field-control">
-                            <input type="text" name="to_date" id="to_date" class="admin__control-text" data-ui-id="date-range-to" />
+                            <input type="text" name="to_date" id="to_date" class="admin__control-text date-range-field" data-ui-id="date-range-to" />
                         </div>
                     </div>
-                    
+                </div>
+                
+                <div class="admin__field-complex-elements admin__field-complex-elements-actions">
                     <div class="admin__field">
-                        <div class="admin__
+                        <div class="admin__field-control">
+                            <button id="search-button" title="<?= $block->escapeHtmlAttr(__('Search')) ?>" type="button" class="action-default scalable primary" data-action="search-form-submit">
+                                <span><?= $block->escapeHtml(__('Search')) ?></span>
+                            </button>
+                            <button id="reset-button" title="<?= $block->escapeHtmlAttr(__('Reset')) ?>" type="button" class="action-default scalable" data-action="search-form-reset">
+                                <span><?= $block->escapeHtml(__('Reset')) ?></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    
+    <div id="employee-report-results" class="admin__data-grid-wrap">
+        <table class="data-grid" id="employee-report-grid">
+            <thead>
+                <tr>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('ID')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Rule Name')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Coupon Code')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Order #')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Status')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Customer')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Order Date')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Discount')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Products')) ?></th>
+                </tr>
+            </thead>
+            <tbody id="employee-report-grid-body">
+                <!-- Results will be loaded here dynamically -->
+                <tr class="data-row">
+                    <td colspan="10" class="no-data-message-cell">
+                        <?= $block->escapeHtml(__('Search to see results')) ?>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+require([
+    'jquery',
+    'mage/calendar',
+    'mage/translate'
+], function($, calendar, $t) {
+    'use strict';
+    
+    // Initialize date pickers
+    $('.date-range-field').calendar({
+        dateFormat: 'M/d/yyyy',
+        showsTime: false,
+        changeMonth: true,
+        changeYear: true,
+        showOn: 'both',
+        buttonText: $t('Select Date')
+    });
+    
+    // Search button click handler
+    $('[data-action=search-form-submit]').on('click', function() {
+        var form = $('#employee-report-search-form');
+        var resultsGrid = $('#employee-report-grid-body');
+        
+        // Show loading message
+        resultsGrid.html('<tr class="data-row"><td colspan="10" class="processing-message-cell">' + $t('Processing...') + '</td></tr>');
+        
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            dataType: 'json',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.items && response.items.length > 0) {
+                    var html = '';
+                    
+                    $.each(response.items, function(index, item) {
+                        html += '<tr class="data-row">' +
+                            '<td>' + (item.entity_id || '') + '</td>' +
+                            '<td>' + (item.rule_name || '') + '</td>' +
+                            '<td>' + (item.coupon_code || '') + '</td>' +
+                            '<td>' + (item.order_increment_id || '') + '</td>' +
+                            '<td>' + (item.status || '') + '</td>' +
+                            '<td>' + (item.customer_name || '') + '</td>' +
+                            '<td>' + (item.order_date || '') + '</td>' +
+                            '<td>' + (item.subtotal || '0.00') + '</td>' +
+                            '<td>' + (item.discount || '0.00') + '</td>' +
+                            '<td>' + (item.products || '') + '</td>' +
+                            '</tr>';
+                    });
+                    
+                    resultsGrid.html(html);
+                } else {
+                    resultsGrid.html('<tr class="data-row"><td colspan="10" class="no-data-message-cell">' + $t('No results found.') + '</td></tr>');
+                }
+            },
+            error: function() {
+                resultsGrid.html('<tr class="data-row"><td colspan="10" class="error-message-cell">' + $t('An error occurred while processing your request.') + '</td></tr>');
+            }
+        });
+    });
+    
+    // Reset button click handler
+    $('[data-action=search-form-reset]').on('click', function() {
+        $('#employee-report-search-form')[0].reset();
+        $('#employee-report-grid-body').html('<tr class="data-row"><td colspan="10" class="no-data-message-cell">' + $t('Search to see results') + '</td></tr>');
+    });
+});
+</script>
+
+<style>
+    .employee-report-search {
+        margin-bottom: 2rem;
+    }
+    .admin__field-complex-elements {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+    .admin__field-complex-elements .admin__field {
+        margin-right: 2rem;
+        min-width: 200px;
+    }
+    .field-or {
+        display: flex;
+        align-items: center;
+        margin: 0 1rem;
+        font-weight: bold;
+    }
+    .admin__field-complex-elements-actions {
+        margin-top: 2rem;
+    }
+    .admin__field-complex-elements-actions .admin__field {
+        width: 100%;
+    }
+    .admin__field-complex-elements-actions button {
+        margin-right: 1rem;
+    }
+    #employee-report-results {
+        margin-top: 2rem;
+    }
+    .no-data-message-cell, 
+    .processing-message-cell,
+    .error-message-cell {
+        text-align: center;
+        padding: 2rem;
+    }
+    .error-message-cell {
+        color: #e22626;
+    }
+    .processing-message-cell {
+        color: #007bdb;
+    }
+</style>
