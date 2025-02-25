@@ -1,0 +1,80 @@
+
+<div class="employee-report-search">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $block->escapeHtml(__('Search Employee Discount Reports')) ?></span>
+    </div>
+    
+    <form id="employee-report-search-form" class="admin__fieldset" action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>" method="post">
+        <fieldset class="admin__fieldset">
+            <div class="admin__field-complex">
+                <div class="admin__field-complex-title">
+                    <span><?= $block->escapeHtml(__('Search Criteria')) ?></span>
+                </div>
+                
+                <div class="admin__field-complex-elements">
+                    <div class="admin__field">
+                        <label class="admin__field-label"><?= $block->escapeHtml(__('Rule Name')) ?></label>
+                        <div class="admin__field-control">
+                            <input type="text" name="rule_name" id="rule_name" class="admin__control-text" />
+                        </div>
+                    </div>
+                    
+                    <div class="admin__field field-or">
+                        <div class="admin__field-control">
+                            <span><?= $block->escapeHtml(__('OR')) ?></span>
+                        </div>
+                    </div>
+                    
+                    <div class="admin__field">
+                        <label class="admin__field-label"><?= $block->escapeHtml(__('Coupon Code')) ?></label>
+                        <div class="admin__field-control">
+                            <input type="text" name="coupon_code" id="coupon_code" class="admin__control-text" />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="admin__field-complex-elements">
+                    <div class="admin__field">
+                        <label class="admin__field-label"><?= $block->escapeHtml(__('Order Number')) ?></label>
+                        <div class="admin__field-control">
+                            <input type="text" name="order_increment_id" id="order_increment_id" class="admin__control-text" />
+                        </div>
+                    </div>
+                    
+                    <div class="admin__field field-or">
+                        <div class="admin__field-control">
+                            <span><?= $block->escapeHtml(__('OR')) ?></span>
+                        </div>
+                    </div>
+                    
+                    <div class="admin__field">
+                        <label class="admin__field-label"><?= $block->escapeHtml(__('Status')) ?></label>
+                        <div class="admin__field-control">
+                            <select name="status" id="status" class="admin__control-select">
+                                <?php foreach ($block->getOrderStatuses() as $status): ?>
+                                    <option value="<?= $block->escapeHtmlAttr($status['value']) ?>">
+                                        <?= $block->escapeHtml($status['label']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="admin__field-complex-elements">
+                    <div class="admin__field">
+                        <label class="admin__field-label"><?= $block->escapeHtml(__('From Date')) ?></label>
+                        <div class="admin__field-control">
+                            <input type="text" name="from_date" id="from_date" class="admin__control-text" data-ui-id="date-range-from" />
+                        </div>
+                    </div>
+                    
+                    <div class="admin__field">
+                        <label class="admin__field-label"><?= $block->escapeHtml(__('To Date')) ?></label>
+                        <div class="admin__field-control">
+                            <input type="text" name="to_date" id="to_date" class="admin__control-text" data-ui-id="date-range-to" />
+                        </div>
+                    </div>
+                    
+                    <div class="admin__field">
+                        <div class="admin__

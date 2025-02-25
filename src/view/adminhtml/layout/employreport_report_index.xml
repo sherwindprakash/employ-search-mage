@@ -1,0 +1,13 @@
+
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Employee Discount Report Search</title>
+        <css src="HmfGroup_EmployReport::css/styles.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="HmfGroup\EmployReport\Block\Adminhtml\Report\Search" name="employreport_search" template="HmfGroup_EmployReport::report/search.phtml" />
+        </referenceContainer>
+    </body>
+</page>
