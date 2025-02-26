@@ -5,6 +5,7 @@ import { ReportTable } from "@/components/ReportTable";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { ArrowLeft } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 
 const mockData = [
   {
@@ -99,7 +100,12 @@ const Index = () => {
             <h1 className="text-2xl font-bold text-gray-800">Employee Discount Report</h1>
           </div>
           
-          <Search onSearch={handleSearch} isLoading={isLoading} />
+          <Card className="mb-8">
+            <CardContent className="p-6">
+              <h2 className="text-xl font-semibold mb-4">Search Criteria</h2>
+              <Search onSearch={handleSearch} isLoading={isLoading} />
+            </CardContent>
+          </Card>
           
           <div className="mt-8">
             <ReportTable data={searchResults} isLoading={isLoading} />

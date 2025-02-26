@@ -43,8 +43,8 @@ export const ReportTable = ({ data, isLoading }: ReportTableProps) => {
                 <TableHead>Status</TableHead>
                 <TableHead>Customer</TableHead>
                 <TableHead>Order date</TableHead>
-                <TableHead>Subtotal (net)</TableHead>
-                <TableHead>Discount (net)</TableHead>
+                <TableHead>Subtotal</TableHead>
+                <TableHead>Discount</TableHead>
                 <TableHead>Products</TableHead>
               </TableRow>
             </TableHeader>
@@ -87,9 +87,9 @@ export const ReportTable = ({ data, isLoading }: ReportTableProps) => {
               <TableHead>Status</TableHead>
               <TableHead>Customer</TableHead>
               <TableHead>Order date</TableHead>
-              <TableHead>Subtotal (net)</TableHead>
-              <TableHead>Discount (net)</TableHead>
-              <TableHead className="w-1/5">Products</TableHead>
+              <TableHead>Subtotal</TableHead>
+              <TableHead>Discount</TableHead>
+              <TableHead>Products</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
