@@ -90,9 +90,14 @@ class Search extends Action
             $collection->addFieldToFilter('order_date', ['lteq' => $toDate]);
         }
         
+        $items = [];
+        foreach ($collection as $report) {
+            $items[] = $report->getData();
+        }
+        
         $result = $this->resultJsonFactory->create();
         return $result->setData([
-            'items' => $collection->getItems(),
+            'items' => $items,
             'total' => $collection->getSize()
         ]);
     }

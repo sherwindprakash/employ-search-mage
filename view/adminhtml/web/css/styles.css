@@ -1,0 +1,44 @@
+
+.employee-report-search .admin__fieldset {
+    margin-bottom: 2rem;
+}
+
+.employee-report-search .admin__field {
+    margin-bottom: 1.5rem;
+}
+
+.employee-report-search .admin__field-label {
+    font-weight: 600;
+}
+
+.employee-report-search .admin__control-text,
+.employee-report-search .admin__control-select {
+    width: 100%;
+    max-width: 400px;
+}
+
+.employee-report-search .action-default {
+    margin-top: 1rem;
+}
+
+.employee-report-search #search-results {
+    margin-top: 2rem;
+}
+
+.employee-report-search .message {
+    padding: 1rem;
+    text-align: center;
+}
+
+.message-notice {
+    background: #fffbbb;
+}
+
+.message-warning {
+    background: #ffd6d6;
+}
+
+.message-error {
+    background: #ffcaca;
+    color: #e02b27;
+}

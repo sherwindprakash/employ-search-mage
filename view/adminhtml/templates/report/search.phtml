@@ -6,43 +6,35 @@
 ?>
 
 <div class="employee-report-search">
-    <form id="employee-report-search-form" action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>" method="post">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $block->escapeHtml(__('Employee Commission Report Search')) ?></span>
+    </div>
+    
+    <form id="employee-report-search-form" class="admin__fieldset" action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>" method="post">
         <fieldset class="admin__fieldset">
-            <legend class="admin__legend">
-                <span><?= $block->escapeHtml(__('Employee Commission Report Search')) ?></span>
-            </legend>
-            
             <div class="admin__field">
-                <label class="admin__field-label" for="rule_name">
-                    <?= $block->escapeHtml(__('Rule Name')) ?>
-                </label>
+                <label class="admin__field-label" for="rule_name"><?= $block->escapeHtml(__('Rule Name')) ?></label>
                 <div class="admin__field-control">
-                    <input id="rule_name" name="rule_name" class="admin__control-text" type="text">
+                    <input id="rule_name" name="rule_name" class="admin__control-text" type="text" />
                 </div>
             </div>
             
             <div class="admin__field">
-                <label class="admin__field-label" for="coupon_code">
-                    <?= $block->escapeHtml(__('Coupon Code')) ?>
-                </label>
+                <label class="admin__field-label" for="coupon_code"><?= $block->escapeHtml(__('Coupon Code')) ?></label>
                 <div class="admin__field-control">
-                    <input id="coupon_code" name="coupon_code" class="admin__control-text" type="text">
+                    <input id="coupon_code" name="coupon_code" class="admin__control-text" type="text" />
                 </div>
             </div>
             
             <div class="admin__field">
-                <label class="admin__field-label" for="order_increment_id">
-                    <?= $block->escapeHtml(__('Order #')) ?>
-                </label>
+                <label class="admin__field-label" for="order_increment_id"><?= $block->escapeHtml(__('Order Number')) ?></label>
                 <div class="admin__field-control">
-                    <input id="order_increment_id" name="order_increment_id" class="admin__control-text" type="text">
+                    <input id="order_increment_id" name="order_increment_id" class="admin__control-text" type="text" />
                 </div>
             </div>
             
             <div class="admin__field">
-                <label class="admin__field-label" for="status">
-                    <?= $block->escapeHtml(__('Order Status')) ?>
-                </label>
+                <label class="admin__field-label" for="status"><?= $block->escapeHtml(__('Status')) ?></label>
                 <div class="admin__field-control">
                     <select id="status" name="status" class="admin__control-select">
                         <?php foreach ($block->getOrderStatuses() as $status): ?>
@@ -55,35 +47,31 @@
             </div>
             
             <div class="admin__field">
-                <label class="admin__field-label" for="from_date">
-                    <?= $block->escapeHtml(__('From Date')) ?>
-                </label>
+                <label class="admin__field-label" for="from_date"><?= $block->escapeHtml(__('From Date')) ?></label>
                 <div class="admin__field-control">
-                    <input id="from_date" name="from_date" class="admin__control-text" type="date">
+                    <input id="from_date" name="from_date" class="admin__control-text" type="text" class="admin__control-text" data-ui-id="date-range-from" />
                 </div>
             </div>
             
             <div class="admin__field">
-                <label class="admin__field-label" for="to_date">
-                    <?= $block->escapeHtml(__('To Date')) ?>
-                </label>
+                <label class="admin__field-label" for="to_date"><?= $block->escapeHtml(__('To Date')) ?></label>
                 <div class="admin__field-control">
-                    <input id="to_date" name="to_date" class="admin__control-text" type="date">
+                    <input id="to_date" name="to_date" class="admin__control-text" type="text" class="admin__control-text" data-ui-id="date-range-to" />
                 </div>
             </div>
             
             <div class="admin__field">
                 <div class="admin__field-control">
-                    <button type="submit" class="action-primary">
-                        <?= $block->escapeHtml(__('Search')) ?>
+                    <button id="search-button" class="action-default primary" type="button">
+                        <span><?= $block->escapeHtml(__('Search')) ?></span>
                     </button>
                 </div>
             </div>
         </fieldset>
     </form>
     
-    <div id="report-results" class="admin__data-grid-wrap">
-        <table class="data-grid" id="employee-report-grid">
+    <div id="search-results" class="admin__data-grid-wrap" style="display:none;">
+        <table class="data-grid">
             <thead>
                 <tr>
                     <th class="data-grid-th"><?= $block->escapeHtml(__('Rule Name')) ?></th>
@@ -96,53 +84,90 @@
                     <th class="data-grid-th"><?= $block->escapeHtml(__('Discount')) ?></th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Results will be loaded dynamically -->
+            <tbody id="search-results-body">
+                <!-- Results will be loaded here -->
             </tbody>
         </table>
     </div>
 </div>
 
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "dateRange": {
+                    "component": "Magento_Ui/js/form/element/date",
+                    "template": "ui/form/element/date",
+                    "dateFormat": "MM/dd/yyyy"
+                }
+            }
+        }
+    },
+    "#from_date": {
+        "calendar": {
+            "dateFormat": "MM/dd/yyyy",
+            "showsTime": false
+        }
+    },
+    "#to_date": {
+        "calendar": {
+            "dateFormat": "MM/dd/yyyy",
+            "showsTime": false
+        }
+    }
+}
+</script>
+
 <script>
 require([
-    'jquery'
-], function ($) {
+    'jquery',
+    'mage/translate'
+], function ($, $t) {
     'use strict';
     
-    $('#employee-report-search-form').on('submit', function (e) {
-        e.preventDefault();
-        
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: $(this).serialize(),
-            dataType: 'json',
-            showLoader: true,
-            success: function (response) {
-                var html = '';
-                
-                if (response.items && response.items.length > 0) {
-                    $.each(response.items, function (index, item) {
-                        html += '<tr>';
-                        html += '<td>' + (item.rule_name || '') + '</td>';
-                        html += '<td>' + (item.coupon_code || '') + '</td>';
-                        html += '<td>' + (item.order_increment_id || '') + '</td>';
-                        html += '<td>' + (item.status || '') + '</td>';
-                        html += '<td>' + (item.customer_name || '') + '</td>';
-                        html += '<td>' + (item.order_date || '') + '</td>';
-                        html += '<td>' + (item.subtotal || '0.00') + '</td>';
-                        html += '<td>' + (item.discount || '0.00') + '</td>';
-                        html += '</tr>';
-                    });
-                } else {
-                    html = '<tr><td colspan="8"><?= $block->escapeHtml(__('No records found.')) ?></td></tr>';
+    $(document).ready(function () {
+        $('#search-button').on('click', function () {
+            var searchForm = $('#employee-report-search-form');
+            var searchResults = $('#search-results');
+            var searchResultsBody = $('#search-results-body');
+            
+            // Show loading message
+            searchResults.show();
+            searchResultsBody.html('<tr><td colspan="8" class="message message-notice">' + $t('Processing...') + '</td></tr>');
+            
+            $.ajax({
+                url: searchForm.attr('action'),
+                type: 'POST',
+                data: searchForm.serialize(),
+                dataType: 'json',
+                showLoader: true,
+                success: function (response) {
+                    var html = '';
+                    
+                    if (response.items && response.items.length > 0) {
+                        $.each(response.items, function (index, item) {
+                            html += '<tr>';
+                            html += '<td>' + (item.rule_name || '') + '</td>';
+                            html += '<td>' + (item.coupon_code || '') + '</td>';
+                            html += '<td>' + (item.order_increment_id || '') + '</td>';
+                            html += '<td>' + (item.status || '') + '</td>';
+                            html += '<td>' + (item.customer_name || '') + '</td>';
+                            html += '<td>' + (item.order_date || '') + '</td>';
+                            html += '<td>' + (item.subtotal || '0.00') + '</td>';
+                            html += '<td>' + (item.discount || '0.00') + '</td>';
+                            html += '</tr>';
+                        });
+                    } else {
+                        html = '<tr><td colspan="8" class="message message-warning">' + $t('No records found.') + '</td></tr>';
+                    }
+                    
+                    searchResultsBody.html(html);
+                },
+                error: function () {
+                    searchResultsBody.html('<tr><td colspan="8" class="message message-error">' + $t('An error occurred while fetching the report data.') + '</td></tr>');
                 }
-                
-                $('#employee-report-grid tbody').html(html);
-            },
-            error: function () {
-                $('#employee-report-grid tbody').html('<tr><td colspan="8"><?= $block->escapeHtml(__('An error occurred while fetching the report data.')) ?></td></tr>');
-            }
+            });
         });
     });
 });
