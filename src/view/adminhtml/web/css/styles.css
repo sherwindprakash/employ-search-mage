@@ -1,0 +1,148 @@
+
+/* HmfGroup EmployReport Module Styles */
+
+/* Main container styles */
+.employee-report-search {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+/* Section title styling */
+.employee-report-search .admin__page-section-title {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e3e3e3;
+    padding-bottom: 10px;
+}
+
+.employee-report-search .admin__page-section-title .title {
+    font-size: 1.8rem;
+    color: #303030;
+    font-weight: 600;
+}
+
+/* Search criteria section */
+.admin__field-complex-title {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #303030;
+    margin-bottom: 15px;
+}
+
+/* Form field styling */
+.admin__field {
+    margin-bottom: 15px;
+}
+
+.admin__field-label {
+    font-weight: 600;
+}
+
+.admin__control-text,
+.admin__control-select {
+    width: 100%;
+    max-width: 300px;
+    height: 32px;
+    border-radius: 3px;
+}
+
+/* OR label styling */
+.field-or {
+    font-weight: 600;
+    color: #666;
+    align-self: center;
+}
+
+/* Date fields styling */
+.date-range-field {
+    padding-right: 30px;
+}
+
+/* Button styling */
+.admin__field-complex-elements-actions {
+    margin-top: 25px;
+}
+
+button.action-default {
+    min-width: 100px;
+    height: 32px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+button.action-default.primary {
+    background-color: #007bdb;
+    border-color: #007bdb;
+    color: #ffffff;
+}
+
+button.action-default.primary:hover {
+    background-color: #0066b2;
+}
+
+button.action-default {
+    background-color: #eeeeee;
+    border-color: #cccccc;
+    color: #333333;
+}
+
+button.action-default:hover {
+    background-color: #e1e1e1;
+}
+
+/* Results grid styling */
+.admin__data-grid-wrap {
+    margin-top: 30px;
+}
+
+.data-grid {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-grid-th {
+    background-color: #f8f8f8;
+    padding: 10px;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+.data-row td {
+    padding: 10px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+/* Message cells */
+.no-data-message-cell,
+.processing-message-cell,
+.error-message-cell {
+    text-align: center;
+    padding: 30px;
+    font-size: 1.4rem;
+}
+
+.error-message-cell {
+    color: #e22626;
+}
+
+.processing-message-cell {
+    color: #007bdb;
+}
+
+/* Responsive layout for search criteria */
+@media screen and (max-width: 767px) {
+    .admin__field-complex-elements {
+        flex-direction: column;
+    }
+    
+    .admin__field-complex-elements .admin__field {
+        margin-right: 0;
+    }
+    
+    .field-or {
+        margin: 10px 0;
+    }
+}
