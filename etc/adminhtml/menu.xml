@@ -1,0 +1,8 @@
+
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="HmfGroup_EmployReport::report" title="Employee Reports" module="HmfGroup_EmployReport" sortOrder="50" parent="Magento_Reports::report" resource="HmfGroup_EmployReport::report"/>
+        <add id="HmfGroup_EmployReport::employee_report" title="Employee Commission Report" module="HmfGroup_EmployReport" sortOrder="10" parent="HmfGroup_EmployReport::report" action="employreport/report/index" resource="HmfGroup_EmployReport::report_view"/>
+    </menu>
+</config>

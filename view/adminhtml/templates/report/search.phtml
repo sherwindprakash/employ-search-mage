@@ -1,0 +1,149 @@
+
+<?php
+/**
+ * @var \HmfGroup\EmployReport\Block\Adminhtml\Report\Search $block
+ */
+?>
+
+<div class="employee-report-search">
+    <form id="employee-report-search-form" action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>" method="post">
+        <fieldset class="admin__fieldset">
+            <legend class="admin__legend">
+                <span><?= $block->escapeHtml(__('Employee Commission Report Search')) ?></span>
+            </legend>
+            
+            <div class="admin__field">
+                <label class="admin__field-label" for="rule_name">
+                    <?= $block->escapeHtml(__('Rule Name')) ?>
+                </label>
+                <div class="admin__field-control">
+                    <input id="rule_name" name="rule_name" class="admin__control-text" type="text">
+                </div>
+            </div>
+            
+            <div class="admin__field">
+                <label class="admin__field-label" for="coupon_code">
+                    <?= $block->escapeHtml(__('Coupon Code')) ?>
+                </label>
+                <div class="admin__field-control">
+                    <input id="coupon_code" name="coupon_code" class="admin__control-text" type="text">
+                </div>
+            </div>
+            
+            <div class="admin__field">
+                <label class="admin__field-label" for="order_increment_id">
+                    <?= $block->escapeHtml(__('Order #')) ?>
+                </label>
+                <div class="admin__field-control">
+                    <input id="order_increment_id" name="order_increment_id" class="admin__control-text" type="text">
+                </div>
+            </div>
+            
+            <div class="admin__field">
+                <label class="admin__field-label" for="status">
+                    <?= $block->escapeHtml(__('Order Status')) ?>
+                </label>
+                <div class="admin__field-control">
+                    <select id="status" name="status" class="admin__control-select">
+                        <?php foreach ($block->getOrderStatuses() as $status): ?>
+                            <option value="<?= $block->escapeHtmlAttr($status['value']) ?>">
+                                <?= $block->escapeHtml($status['label']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="admin__field">
+                <label class="admin__field-label" for="from_date">
+                    <?= $block->escapeHtml(__('From Date')) ?>
+                </label>
+                <div class="admin__field-control">
+                    <input id="from_date" name="from_date" class="admin__control-text" type="date">
+                </div>
+            </div>
+            
+            <div class="admin__field">
+                <label class="admin__field-label" for="to_date">
+                    <?= $block->escapeHtml(__('To Date')) ?>
+                </label>
+                <div class="admin__field-control">
+                    <input id="to_date" name="to_date" class="admin__control-text" type="date">
+                </div>
+            </div>
+            
+            <div class="admin__field">
+                <div class="admin__field-control">
+                    <button type="submit" class="action-primary">
+                        <?= $block->escapeHtml(__('Search')) ?>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    
+    <div id="report-results" class="admin__data-grid-wrap">
+        <table class="data-grid" id="employee-report-grid">
+            <thead>
+                <tr>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Rule Name')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Coupon Code')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Order #')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Status')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Customer')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Order Date')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+                    <th class="data-grid-th"><?= $block->escapeHtml(__('Discount')) ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Results will be loaded dynamically -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+require([
+    'jquery'
+], function ($) {
+    'use strict';
+    
+    $('#employee-report-search-form').on('submit', function (e) {
+        e.preventDefault();
+        
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            showLoader: true,
+            success: function (response) {
+                var html = '';
+                
+                if (response.items && response.items.length > 0) {
+                    $.each(response.items, function (index, item) {
+                        html += '<tr>';
+                        html += '<td>' + (item.rule_name || '') + '</td>';
+                        html += '<td>' + (item.coupon_code || '') + '</td>';
+                        html += '<td>' + (item.order_increment_id || '') + '</td>';
+                        html += '<td>' + (item.status || '') + '</td>';
+                        html += '<td>' + (item.customer_name || '') + '</td>';
+                        html += '<td>' + (item.order_date || '') + '</td>';
+                        html += '<td>' + (item.subtotal || '0.00') + '</td>';
+                        html += '<td>' + (item.discount || '0.00') + '</td>';
+                        html += '</tr>';
+                    });
+                } else {
+                    html = '<tr><td colspan="8"><?= $block->escapeHtml(__('No records found.')) ?></td></tr>';
+                }
+                
+                $('#employee-report-grid tbody').html(html);
+            },
+            error: function () {
+                $('#employee-report-grid tbody').html('<tr><td colspan="8"><?= $block->escapeHtml(__('An error occurred while fetching the report data.')) ?></td></tr>');
+            }
+        });
+    });
+});
+</script>
